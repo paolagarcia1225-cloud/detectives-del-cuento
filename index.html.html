@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Detectives del cuento</title>
+<style>
+:root{--bg:#fffaf0;--card:#fff;--tx:#241a3a;--pri:#4b1a8c;--pri-tx:#fff;--ok:#146c2e;--okbg:#e3f6e8;--bad:#9c2b1a;--badbg:#fdeae6;--bd:#d9cfee;--ini:#ffe08a;--nud:#ffb3a1;--des:#a8e0b8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17122a;--card:#241d3d;--tx:#f2eefc;--pri:#b79cf5;--pri-tx:#1a1030;--ok:#8fe0a6;--okbg:#17372499;--bad:#ffb4a6;--badbg:#4a1e1899;--bd:#4a3f75;--ini:#6b5a1c;--nud:#7a3a2c;--des:#255a37}}
+:root[data-theme="dark"]{--bg:#17122a;--card:#241d3d;--tx:#f2eefc;--pri:#b79cf5;--pri-tx:#1a1030;--ok:#8fe0a6;--okbg:#17372499;--bad:#ffb4a6;--badbg:#4a1e1899;--bd:#4a3f75;--ini:#6b5a1c;--nud:#7a3a2c;--des:#255a37}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:20px/1.55 Verdana,Tahoma,"Trebuchet MS",sans-serif}
+main{max-width:760px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:2px solid var(--bd);border-radius:20px;padding:20px;margin:14px 0}
+h1{font-size:2rem;margin:.2em 0;color:var(--pri)}h2{font-size:1.4rem;color:var(--pri);margin:0 0 .4em}
+.lupa{font-size:3rem}
+button{font:inherit;min-height:48px;padding:8px 18px;border-radius:14px;border:2px solid var(--pri);background:var(--card);color:var(--tx);cursor:pointer}
+button.main{background:var(--pri);color:var(--pri-tx);font-weight:bold}
+button:focus-visible,textarea:focus-visible{outline:4px solid #f5a300;outline-offset:2px}
+button:disabled{opacity:.55;cursor:default}
+.fb{margin-top:10px;padding:10px 14px;border-radius:12px;min-height:1.2em}
+.fb.ok{background:var(--okbg);color:var(--ok)}.fb.bad{background:var(--badbg);color:var(--bad)}
+.tag{display:inline-block;padding:2px 12px;border-radius:99px;font-weight:bold;font-size:.9rem}
+.ini{background:var(--ini)}.nud{background:var(--nud)}.des{background:var(--des)}
+.story p{margin:.6em 0;padding:8px 12px;border-radius:12px}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.frag{padding:12px;border:2px solid var(--bd);border-radius:14px;margin:10px 0}
+.opt{display:block;width:100%;text-align:left;margin:6px 0}
+.opt.ok{background:var(--okbg);border-color:var(--ok)}.opt.bad{background:var(--badbg);border-color:var(--bad)}
+textarea{width:100%;min-height:120px;font:inherit;padding:10px;border-radius:12px;border:2px solid var(--bd);background:var(--bg);color:var(--tx);box-sizing:border-box}
+.bar{height:12px;background:var(--bd);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--pri);width:0;transition:width .3s}
+.small{font-size:.8rem}
+details{margin-top:10px}summary{cursor:pointer;min-height:44px}
+table{border-collapse:collapse;width:100%;font-size:.8rem}td{border:1px solid var(--bd);padding:4px 8px;vertical-align:top}
+.badge{font-size:4rem;text-align:center}
+</style>
+</head>
+<body>
+<main>
+<div class="bar" role="progressbar" aria-label="Progreso" aria-valuemin="0" aria-valuemax="8" id="pb"><i id="pbi"></i></div>
+
+<section class="card" id="s0">
+<div class="lupa" aria-hidden="true">🔍</div>
+<h1>Detectives del cuento</h1>
+<p>Hola, soy el Detective Lupa. Hoy tu misión es encontrar el <b>inicio</b>, el <b>nudo</b> y el <b>desenlace</b> de un cuento.</p>
+<p class="small">Lengua Castellana · Grado 4.º · 40 minutos</p>
+<button class="main" onclick="go(1)">Comenzar la misión</button>
+</section>
+
+<section class="card" id="s1" hidden>
+<h2>Tu misión</h2>
+<p>Al terminar podrás:</p>
+<ul>
+<li><b>Identificar</b> el inicio, el nudo y el desenlace.</li>
+<li><b>Ordenar</b> los hechos de un cuento.</li>
+<li><b>Explicar</b> qué problema tiene el personaje y cómo se resuelve.</li>
+<li><b>Crear</b> un final diferente.</li>
+</ul>
+<p>Antes de leer, mira el título y piensa: ¿qué crees que le pasará al zorro con la luna?</p>
+<button class="main" onclick="go(2)">Leer el cuento</button>
+</section>
+
+<section class="card" id="s2" hidden>
+<h2>La luna en el pozo</h2>
+<button id="speak" onclick="speak()" aria-label="Escuchar el cuento">🔊 Escuchar el cuento</button>
+<div class="story" id="story">
+<p><span class="tag ini">Inicio</span><br>En una noche muy oscura, un zorro llamado Tomás caminaba hambriento por el campo. Al pasar junto a un viejo pozo, miró hacia abajo y vio algo redondo y brillante. —¡Un queso gigante! —exclamó feliz.</p>
+<p><span class="tag nud">Nudo</span><br>Tomás se subió al balde y se deslizó hasta el fondo del pozo. Intentó morder el queso, pero solo tocó agua fría. Entonces se dio cuenta de que era el reflejo de la luna. Lo peor fue que el balde no volvía a subir y el zorro quedó atrapado, temblando de frío.</p>
+<p><span class="tag des">Desenlace</span><br>Al amanecer, una cabra se asomó al pozo y oyó los llamados del zorro. Tomás le prometió no volver a engañar a nadie, y la cabra bajó otro balde con una cuerda. Así pudo salir. Desde ese día, Tomás mira dos veces antes de creer en lo que brilla.</p>
+</div>
+<details><summary>Palabra difícil: reflejo</summary><p>Imagen que se ve en el agua o en un espejo.</p></details>
+<p><button class="main" onclick="go(3)">Ya leí el cuento</button></p>
+</section>
+
+<section class="card" id="s3" hidden>
+<h2>Las tres partes de un cuento</h2>
+<p><span class="tag ini">Inicio</span> Conocemos al personaje y el lugar.</p>
+<p><span class="tag nud">Nudo</span> Aparece el problema y se complica.</p>
+<p><span class="tag des">Desenlace</span> El problema se resuelve y la historia termina.</p>
+<p>Ejemplo: en nuestro cuento, el problema (nudo) es que el zorro queda atrapado.</p>
+<button class="main" onclick="go(4)">Ir a la Actividad 1</button>
+</section>
+
+<section class="card" id="s4" hidden>
+<h2>Actividad 1: ordena los hechos</h2>
+<p>Toca las tarjetas en el orden en que ocurren. Puedes intentarlo las veces que quieras.</p>
+<div class="row" id="cards"></div>
+<p>Tu orden: <span id="seq">—</span></p>
+<div class="fb" id="fb1" role="status" aria-live="polite"></div>
+<button onclick="init1()">Reiniciar</button>
+<button class="main" id="n4" onclick="go(5)" disabled>Siguiente</button>
+</section>
+
+<section class="card" id="s5" hidden>
+<h2>Actividad 2: ¿inicio, nudo o desenlace?</h2>
+<div id="frags"></div>
+<div class="fb" id="fb2" role="status" aria-live="polite"></div>
+<button class="main" id="n5" onclick="go(6)" disabled>Siguiente</button>
+</section>
+
+<section class="card" id="s6" hidden>
+<h2>Actividad 3: preguntas del detective</h2>
+<p id="qn" class="small"></p>
+<p id="qt"><b></b></p>
+<div id="qo"></div>
+<div class="fb" id="fb3" role="status" aria-live="polite"></div>
+<button class="main" id="qnext" onclick="nextQ()" hidden>Siguiente pregunta</button>
+</section>
+
+<section class="card" id="s7" hidden>
+<h2>Actividad 4: reto creativo</h2>
+<p>¿Y si la cabra no hubiera llegado? Escribe un final diferente (mínimo 3 oraciones). También puedes dibujarlo en tu cuaderno.</p>
+<label for="fin" class="small">Mi final:</label>
+<textarea id="fin"></textarea>
+<fieldset style="border:none;padding:0"><legend>Mi autoevaluación</legend>
+<label><input type="checkbox" class="ck"> Mi final tiene relación con el problema.</label><br>
+<label><input type="checkbox" class="ck"> El problema queda resuelto.</label><br>
+<label><input type="checkbox" class="ck"> Escribí al menos 3 oraciones.</label></fieldset>
+<div class="fb" id="fb4" role="status" aria-live="polite"></div>
+<button class="main" onclick="fin4()">Terminar</button>
+</section>
+
+<section class="card" id="s8" hidden>
+<div class="badge" aria-hidden="true">🏅</div>
+<h2 style="text-align:center">¡Misión cumplida, detective!</h2>
+<p id="score" style="text-align:center"></p>
+<p>¿Cómo te sentiste con esta misión?</p>
+<div class="row"><button onclick="emo('Gracias. ¡Seguiste adelante!')" aria-label="Difícil">😟</button><button onclick="emo('Gracias. Con práctica será más fácil.')" aria-label="Normal">😐</button><button onclick="emo('¡Qué bueno que te gustó!')" aria-label="Fácil">😀</button></div>
+<div class="fb" id="fb5" role="status" aria-live="polite"></div>
+<button onclick="location.reload()">Jugar de nuevo</button>
+<details><summary>Créditos, licencia y ficha de metadatos</summary>
+<p class="small"><b>Licencia:</b> “Detectives del cuento”, de [autores], 2026, se distribuye bajo licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es">CC BY-NC-SA 4.0</a>. Cuento original. Íconos: emojis del sistema.</p>
+<table>
+<tr><td>Título</td><td>Detectives del cuento</td></tr>
+<tr><td>Idioma</td><td>es</td></tr>
+<tr><td>Descripción</td><td>Lección interactiva sobre inicio, nudo y desenlace del cuento.</td></tr>
+<tr><td>Destinatario</td><td>Estudiantes de 9 a 10 años (grado 4.º)</td></tr>
+<tr><td>Tiempo de aprendizaje</td><td>PT40M</td></tr>
+<tr><td>Tipo de interactividad</td><td>Mixta, nivel medio</td></tr>
+<tr><td>Formato</td><td>text/html</td></tr>
+<tr><td>Derechos</td><td>CC BY-NC-SA 4.0</td></tr>
+</table></details>
+</section>
+</main>
+
+<script>
+var cur=0,okScore=0;
+function go(n){document.getElementById("s"+cur).hidden=true;cur=n;var s=document.getElementById("s"+n);s.hidden=false;document.getElementById("pbi").style.width=(n/8*100)+"%";document.getElementById("pb").setAttribute("aria-valuenow",n);if(n==4)init1();if(n==5)init2();if(n==6)initQ();if(n==8)document.getElementById("score").textContent="Acertaste "+okScore+" de 5 preguntas del cuestionario.";window.scrollTo(0,0);var h=s.querySelector("h1,h2");if(h){h.setAttribute("tabindex","-1");h.focus({preventScroll:true})}}
+function speak(){try{speechSynthesis.cancel();var t=document.getElementById("story").innerText.replace(/Inicio|Nudo|Desenlace/g,"");var u=new SpeechSynthesisUtterance(t);u.lang="es-CO";speechSynthesis.speak(u)}catch(e){}}
+/* Actividad 1 */
+var HECHOS=["El zorro ve un círculo brillante en el pozo.","Baja en el balde para alcanzar el “queso”.","Descubre que era el reflejo de la luna.","Queda atrapado en el fondo.","La cabra lo rescata con una cuerda."];
+var pos=0,seq=[];
+function init1(){pos=0;seq=[];document.getElementById("seq").textContent="—";document.getElementById("fb1").textContent="";document.getElementById("fb1").className="fb";document.getElementById("n4").disabled=true;var o=[3,0,4,2,1],c=document.getElementById("cards");c.innerHTML="";o.forEach(function(i){var b=document.createElement("button");b.textContent=HECHOS[i];b.onclick=function(){pick(i,b)};c.appendChild(b)})}
+function pick(i,b){var f=document.getElementById("fb1");if(i==pos){b.disabled=true;pos++;seq.push(pos);document.getElementById("seq").textContent=seq.join(" → ");if(pos==5){f.className="fb ok";f.textContent="¡Excelente! Ordenaste todos los hechos.";document.getElementById("n4").disabled=false}else{f.className="fb ok";f.textContent="¡Bien! Sigue con el siguiente hecho."}}else{f.className="fb bad";f.textContent="¡Casi! Piensa: ¿qué tuvo que pasar antes de esa tarjeta? Prueba otra."}}
+/* Actividad 2 */
+var FR=[["Un zorro caminaba hambriento por el campo.","ini","Aquí conocemos al personaje y el lugar."],["Vio algo redondo y brillante en el pozo.","ini","Se presenta lo que mueve la historia."],["Solo tocó agua fría: era el reflejo.","nud","Aquí aparece el problema."],["El balde no volvía a subir.","nud","El problema se hace más grande."],["La cabra bajó otro balde con una cuerda.","des","Aquí se resuelve el problema."],["Tomás mira dos veces antes de creer en lo que brilla.","des","Es el cierre y deja una enseñanza."]];
+var N={ini:"Inicio",nud:"Nudo",des:"Desenlace"},done2=0;
+function init2(){done2=0;var d=document.getElementById("frags");d.innerHTML="";document.getElementById("n5").disabled=true;document.getElementById("fb2").textContent="";FR.forEach(function(f,k){var w=document.createElement("div");w.className="frag";w.innerHTML="<p style='margin:0 0 6px'>“"+f[0]+"”</p>";var r=document.createElement("div");r.className="row";["ini","nud","des"].forEach(function(t){var b=document.createElement("button");b.textContent=N[t];b.className="";b.onclick=function(){ans2(f,t,b,r,w)};r.appendChild(b)});w.appendChild(r);d.appendChild(w)})}
+function ans2(f,t,b,r,w){var fb=document.getElementById("fb2");if(t==f[1]){fb.className="fb ok";fb.textContent="¡Correcto! "+f[2];Array.prototype.forEach.call(r.children,function(x){x.disabled=true});b.className="opt ok";b.style.width="auto";done2++;if(done2==FR.length){fb.textContent+=" ¡Terminaste la actividad!";document.getElementById("n5").disabled=false}}else{fb.className="fb bad";fb.textContent="¡Casi! Pregúntate: ¿conocemos al personaje, aparece el problema o se resuelve? Prueba otra vez."}}
+/* Actividad 3 */
+var Q=[["¿Qué creyó el zorro que había en el pozo?",["Un pez","Un queso gigante","Una piedra"],1,"El zorro confundió el reflejo de la luna con un queso."],["¿Cuál es el problema del cuento?",["El zorro queda atrapado en el pozo","La cabra tiene sed","Llueve mucho"],0,"El problema es el centro del nudo."],["¿Quién ayuda al zorro?",["Un granjero","Una cabra","Un búho"],1,"La cabra aparece en el desenlace."],["¿En qué parte se resuelve el problema?",["Inicio","Nudo","Desenlace"],2,"El desenlace cierra la historia."],["¿Qué aprendió Tomás?",["A dudar antes de creer lo que parece","A nadar","A cavar"],0,"La enseñanza está en el final del cuento."]];
+var qi=0,locked=false;
+function initQ(){qi=0;okScore=0;showQ()}
+function showQ(){locked=false;var q=Q[qi];document.getElementById("qn").textContent="Pregunta "+(qi+1)+" de 5";document.getElementById("qt").innerHTML="<b>"+q[0]+"</b>";var o=document.getElementById("qo");o.innerHTML="";q[1].forEach(function(t,i){var b=document.createElement("button");b.className="opt";b.textContent=t;b.onclick=function(){ansQ(i,b)};o.appendChild(b)});document.getElementById("fb3").textContent="";document.getElementById("fb3").className="fb";document.getElementById("qnext").hidden=true}
+function ansQ(i,b){if(locked)return;var q=Q[qi],f=document.getElementById("fb3"),bs=document.getElementById("qo").children;if(i==q[2]){locked=true;okScore++;b.classList.add("ok");f.className="fb ok";f.textContent="¡Muy bien! "+q[3]}else{locked=true;b.classList.add("bad");bs[q[2]].classList.add("ok");f.className="fb bad";f.textContent="Todavía no. La respuesta era “"+q[1][q[2]]+"”. "+q[3]}document.getElementById("qnext").hidden=false;document.getElementById("qnext").textContent=qi==4?"Ir al reto creativo":"Siguiente pregunta"}
+function nextQ(){if(qi==4){go(7)}else{qi++;showQ()}}
+/* Actividad 4 */
+function fin4(){var t=document.getElementById("fin").value.trim(),n=t.split(/[.!?]+/).filter(function(x){return x.trim().length>2}).length,f=document.getElementById("fb4");if(n<3){f.className="fb bad";f.textContent="Tu final tiene "+n+" oración(es). Escribe al menos 3 y prueba otra vez, detective.";return}f.className="fb ok";f.textContent="¡Qué final tan creativo! Tu docente podrá leerlo en clase.";setTimeout(function(){go(8)},900)}
+function emo(m){var f=document.getElementById("fb5");f.className="fb ok";f.textContent=m}
+</script>
+</body>
+</html>
